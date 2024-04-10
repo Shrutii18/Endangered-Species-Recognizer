@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Animal Detection</title>
+    <link rel="stylesheet" href="Prj.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+</head>
+<body>
+    <div class="navbar">
+        <img class="uppers" src="images/pngegg.png" alt="vines">
+        <img class="uppers" src="images/pngegg.png" alt="vines">
+        <img class="uppers" src="images/pngegg.png" alt="vines">
+        
+</div >
+    <div class="welcome">
+    <div>
+        <img class="background" src="images/background.jpg" alt="vines">
+    </div>
+    <div class="text">
+        <h1>Wild Watcher</h1>
+    </div>
+</div>
+
+   
+
+    <section class="container">
+       
+    <div class="container2">
+        <img class="vien" src="images/hanging.png">
+        <img class="sides" src="images/side stem.png">
+        <img class="vien2" src="images/hanging.png">
+        <img class="tiger" src="images/tiger.png">
+        <img class="monkey" src="images/monkey.png">
+    <div class="inline"> <img class="icon" src="images/live.png"> <h2> Animal Detection</h2>  </div>
+    <div id="webcam-container">
+        <video id="webcam" autoplay playsinline width="640" height="480"></video>
+        <canvas id="output" width="640" height="480"></canvas>
+    </div>
+    <div class="container">
+    <button id="startDetectionBtn">Start Animal Detection</button>
+    <button id="captureBtn" disabled>Capture Animal</button>
+    <button id="stopDetectionBtn" disabled>Stop Detection</button>
+    </div>
+<div class="container3">
+    <div id="prediction">
+        <h2>Predictions :</h2>
+    </div>
+</div>
+<div class="container3">
+    <div id="capturedAnimalInfo" style="display: none;">
+      
+        <h2>Captured Animal Info :</h2>
+        <p>Detected Animal: <span id="animalName"></span></p>
+    </div>
+</div>
+<section class="output">
+    <div id="capturedAnimalPhoto" style="display: none;">
+        <h3>Captured Animal Image :</h3>
+       
+        <img class="animalImage" id="animalImage" width="320" height="240">
+    </div>
+</section>    
+<div class="container3">    
+    <div id="animalCount" style="display: none;">
+        <h2>Animal Count :</h2>
+        <ul id="animalCountList"></ul>
+    </div>
+    
+</div>   
+<h1 class="welcome">Thank You...!</h1>
+</div> 
+</section>
+<section>
+    <img class="jungle" src="images/jungle.png"> 
+</section>
+
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("7aAACw9oz6-Z7tspF");
+   })();
+</script>
+
+<script>
+    const webcamElement = document.getElementById('webcam');
+    const startDetectionBtn = document.getElementById('startDetectionBtn');
+    const captureBtn = document.getElementById('captureBtn');
+    const stopDetectionBtn = document.getElementById('stopDetectionBtn');
+    const predictionDiv = document.getElementById('prediction');
+    const capturedAnimalInfoDiv = document.getElementById('capturedAnimalInfo');
+    const capturedAnimalPhotoDiv = document.getElementById('capturedAnimalPhoto');
+    const animalNameSpan = document.getElementById('animalName');
+    const animalImageElement = document.getElementById('animalImage');
+    const animalCountList = document.getElementById('animalCountList');
+    const animalCountDiv = document.getElementById('animalCount');
+    let model;
+    let videoStream;
+    let isDetecting = false;
+    let capturedImage;
+    const detectedAnimals = {};
+    let animals=["lion","tiger cat","macaque","giant panda", "panda","African elephant","gorilla"]
+    
+
+
+function reloadPage() {
+location.reload();
+}
+
+
+function sendMails(templateParams){
+emailjs.send('service_5kdn40o', 'template_dlkqagt', templateParams)
+.then(function(response) {
+   console.log('SUCCESS!', response.status, response.text);
+}, function(error) {
+   console.log('FAILED...', error);
+});
+}
+
+
+
+let maildata={
+animaldata:""
+}
+
+
+
+    async function loadModel() {
+        model = await mobilenet.load();
+    }
+
+    async function setupWebcam() {
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        webcamElement.srcObject = videoStream;
+
+        return new Promise((resolve) => {
+            webcamElement.onloadedmetadata = () => {
+                resolve();
+            };
+        });
+    }
+
+    async function startDetection() {
+        startDetectionBtn.disabled = true;
+        captureBtn.disabled = false;
+        stopDetectionBtn.disabled = false;
+        isDetecting = true;
+        let predictions=""
+        while (isDetecting) {
+            const image = await captureImage();
+           predictions = await performDetection(image);
+           
+            await tf.nextFrame();
+        }
+        displayPredictions(predictions);
+    }
+
+    async function captureImage() {
+        const canvas = document.createElement('canvas');
+        canvas.width = webcamElement.width;
+        canvas.height = webcamElement.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(webcamElement, 0, 0, webcamElement.width, webcamElement.height);
+        return canvas;
+    }
+
+    async function performDetection(image) {
+        const tfImage = tf.browser.fromPixels(image);
+        const predictions = await model.classify(tfImage);
+        return predictions;
+    }
+
+    function displayPredictions(predictions) {
+        let predictionText = '<h2>Predictions:</h2><ul>';
+        predictions.forEach(prediction => {
+            predictionText += <li>${prediction.className}: ${Math.floor(prediction.probability * 100)}%</li>;
+        });
+        predictionText += '</ul>';
+        maildata.predict=predictionText;
+        predictionDiv.innerHTML = predictionText;
+    }
+
+    function displayCapturedInfoAndPhoto(predictions) {
+        const topPrediction = predictions[0];
+        animalNameSpan.textContent = topPrediction.className;
+        // maildata.animaldata=topPrediction.className[0]
+        capturedAnimalInfoDiv.style.display = 'block';
+        capturedAnimalPhotoDiv.style.display = 'block';
+        animalImageElement.src = capturedImage.toDataURL();
+
+        const detectedAnimal = topPrediction.className;
+        
+        if (!detectedAnimals[detectedAnimal]) {
+            detectedAnimals[detectedAnimal] = 1;
+        } else {
+            detectedAnimals[detectedAnimal]++;
+        }
+        
+    }
+
+    async function stopDetection() {
+        displayCapturedInfoAndPhoto(await performDetection(capturedImage));
+        displayAnimalCount();
+       
+        let animalfound=false
+        let animalName=""
+        for (const animal in detectedAnimals) {
+         let nw=[]
+         nw=animal.split(",")  
+         animalName=nw[0]
+        }
+        animals.forEach((data)=>{
+            if(animalName==data){
+                animalfound=true
+            }
+        })
+        if(!animalfound){
+            startDetection();
+            capturedImage = await captureImage();
+            stopDetection();
+            return false
+        }
+        
+      // Check if the object exists in localStorage
+const existingObject = localStorage.getItem('animalsdata');
+
+if (existingObject) {
+    // If it exists, parse the JSON and update its properties
+    const parsedObject = JSON.parse(existingObject);
+
+    parsedObject[animalName]++
+    // Store the updated object back in localStorage
+    localStorage.setItem('animalsdata', JSON.stringify(parsedObject));
+} else {
+    // If it doesn't exist, create a new object
+    const animals = {
+        "lion": 0,
+        "tiger cat": 0,
+        "macaque": 0,
+        "giant panda": 0,
+        "panda": 0,
+        "African elephant": 0,
+        "gorilla": 0,
+      };
+      console.log("new lcal added")
+
+    // Store the new object in localStorage
+    localStorage.setItem('animalsdata', JSON.stringify(animals));
+}
+
+
+       // alert(animalName)
+
+        setTimeout(reloadPage, 5000);
+
+        
+        isDetecting = false;
+        videoStream.getTracks().forEach(track => track.stop());
+        startDetectionBtn.disabled = false;
+        captureBtn.disabled = true;
+        stopDetectionBtn.disabled = true;
+        maildata.animaldata=animalName
+        sendMails(maildata)
+    //console.log("mail send")
+    }
+
+    function displayAnimalCount() {
+        animalCountList.innerHTML = '';
+        for (const animal in detectedAnimals) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${animal}: ${detectedAnimals[animal]}`;
+            animalCountList.appendChild(listItem);
+        }
+        animalCountDiv.style.display = 'block';
+    }
+
+    async function main() {
+        await loadModel();
+        await setupWebcam();
+            startDetection();
+            capturedImage = await captureImage();
+            // if(maildata.animaldata=="military uniform"){
+            stopDetection();
+            // }
+        // startDetectionBtn.addEventListener('click', async () => {
+        //     await setupWebcam();
+        //     startDetection();
+
+        // // });
+
+        // captureBtn.addEventListener('click', async () => {
+        //     capturedImage = await captureImage();
+        //     stopDetection();
+        // });
+
+        //stopDetectionBtn.addEventListener('click', () => {
+        
+         //});
+    }
+
+    main();
+    
+</script>
+</body>
+</html>

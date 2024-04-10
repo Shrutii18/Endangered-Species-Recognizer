@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="SignIn.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <title>Document</title>
+    <script>
+        function fun() {
+            let username = uname.value
+            let password = pass.value
+            if (username == "majorproject" && password == "1234") {
+                window.location = "majorproj.html"
+
+            } else {
+                error.innerText = "enter id and password again"
+                return false
+            }
+
+
+        }   </script>
+
+</head>
+
+<body>
+
+
+    <img class="bg" src="images/SIbg.jpg">
+    <div class="holder">
+
+        <div class="holder, container" data-aos="fade-out">
+            <img class="drops" src="images/drops.png">
+            <form action="majorproj.html" onsubmit="return fun()">
+                <span id="error"></span>
+                <h1 data-aos="fade-down">Sign In</h1>
+                <input data-aos="fade-left" class="ip" type="text" id="uname" name="name" placeholder="Enter Name"><br>
+                <input data-aos="fade-right" class="ip" type="text" id="pass" name="pass"
+                    placeholder="Enter Password"><br>
+                <div style="display: flex; margin-left: 10%;">
+                    <input class="button" type="submit">
+                    <input class="button" type="reset">
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            offset: 100,
+            duration: 1000,
+
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap');
+
+
+body {
+
+    font-family: Arial, sans-serif;
+    margin-top: 0px;
+    background-color: #445D48;
+}
+
+#webcam-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#webcam,
+#output {
+    background-color: aliceblue;
+    border-radius: 10%;
+    margin: 10px 5px;
+    border: 1px solid #ccc;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+#output {
+    display: none;
+}
+
+button {
+    margin: 10px;
+    margin-top: 5%;
+    margin-bottom: 30%;
+    padding: 10px 10px;
+    border: 1px solid white;
+    background-color: #445D48;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    color: white
+}
+
+#prediction,
+#capturedAnimalInfo,
+#capturedAnimalPhoto {
+    text-align: center;
+    margin: 10px;
+}
+
+.uppers {
+
+    padding-left: 20px;
+    width: 460px;
+    height: 300px;
+
+}
+
+.navbar {
+    margin-top: -2%;
+    position: absolute;
+    z-index: -2;
+}
+
+.welcome {
+    padding-top: 150px;
+    padding-bottom: 100px;
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 300%;
+    color: white;
+
+}
+
+.background {
+    width: -webkit-fill-available;
+    z-index: -1;
+    position: absolute;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.text {
+    padding-top: 100px;
+}
+
+.dec {
+    width: -webkit-fill-available;
+    height: 100px;
+}
+
+.string {
+    width: 1000px;
+    height: 200px;
+    padding-left: 220px;
+    padding-bottom: 40px;
+}
+
+.container {
+    background-color: #B5CB99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -5
+}
+
+.container2 {
+    padding-top: 10%;
+}
+
+.icon {
+    width: 15%;
+}
+
+.sides {
+    width: 30%;
+    position: absolute;
+    z-index: 5;
+    margin-left: 50.7%;
+    margin-top: -9.8%
+}
+
+.vien {
+    position: absolute;
+    z-index: 6;
+    width: 35%;
+    margin-left: -22%;
+    margin-top: -10%;
+
+}
+
+.vien2 {
+    position: absolute;
+    z-index: 6;
+    width: 28%;
+    margin-left: 54%;
+    margin-top: 95%;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+
+}
+
+.tiger {
+    width: 30%;
+    position: absolute;
+    z-index: 7;
+    margin-top: 53%;
+    margin-left: 29%;
+}
+
+.monkey {
+    width: 40%;
+    position: absolute;
+    z-index: 3;
+    margin-top: 107%;
+    margin-left: -17%
+}
+
+.jungle {
+    position: absolute;
+    z-index: 12;
+    width: 1700px;
+    margin-left: -8%
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    font-size: 50px;
+    padding: 10px 10px;
+    color: white;
+}
+
+h3 {
+    font-size: 50px;
+    padding: 10px 10px;
+    color: #445D48;
+}
+
+.inline {
+    display: flex;
+    justify-content: center;
+}
+
+.container3 {
+    background-color: #445D48;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    color: azure;
+    border: 5px solid white;
+    margin: 5px 5px;
+    margin-bottom: 10%;
+}
+
+.container4 {
+    background-color: #B5CB99;
+    display: flex;
+    align-items: center;
+}
+
+.camera {
+    width: 42.5%;
+    position: absolute;
+    z-index: 2;
+    margin-left: -20%;
+    margin-top: -8%;
+
+
+}
+
+.animalImage {
+    position: absolute;
+    width: 40%;
+    height: 50%;
+    z-index: 3;
+    margin-left: -19%;
+    margin-top: 6.3%;
+
+}
+
+.output {
+    height: 600px;
+
+}
